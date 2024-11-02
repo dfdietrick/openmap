@@ -239,7 +239,6 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
          * space to find out how long the line should be. Then, we'll move that
          * length into component pixel space.
          */
-
         lower_y = h / 2;
         right_x = w / 2;
         left_x = right_x - width;
@@ -254,7 +253,7 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
         double new_dist = scopeDistance(dist);
 
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("modifying " + dist + " to new distance: " + new_dist);
+            logger.log(Level.FINE, "modifying {0} to new distance: {1}", new Object[]{dist, new_dist});
         }
 
         left_x = getPtAtDistanceFromLatLon(loc2, new_dist, projection, uom);
@@ -263,20 +262,20 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
 
         // If the length of the distance line is longer than the width of the
         // panel, divide it in half.
-        int maxWidth = Math.max(getWidth() - Math.abs(locationXoffset) * 2, 50);
+        int maxWidth = Math.max(getWidth() / 2 - Math.abs(locationXoffset) * 2, 50);
         while (lineLength > maxWidth) {
 
             lineLength /= 3;
             new_dist /= 3.0;
 
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("length of line too long, halving to " + lineLength);
+                logger.log(Level.FINE, "length of line too long, halving to [0]", lineLength);
             }
             double testDist = scopeDistance(new_dist);
             if (!MoreMath.approximately_equal(testDist, new_dist) && !(new_dist <= .01)) {
                 lineLength = right_x - getPtAtDistanceFromLatLon(loc2, testDist, projection, uom);
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("needed to rescope distance to " + testDist + " from " + new_dist);
+                    logger.log(Level.FINE, "needed to rescope distance to {0} from {1}", new Object[]{testDist, new_dist});
                 }
                 new_dist = testDist;
             }
@@ -296,7 +295,7 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
             }
 
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("modified UOM to " + cur_uom.getAbbr() + ", value: " + new_dist);
+                logger.log(Level.FINE, "modified UOM to {0}, value: {1}", new Object[]{cur_uom.getAbbr(), new_dist});
             }
 
             double testDist = scopeDistance(new_dist);
@@ -304,7 +303,7 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
                 lineLength = right_x
                         - getPtAtDistanceFromLatLon(loc2, testDist, projection, cur_uom);
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("needed to rescope distance to " + testDist + " from " + new_dist);
+                    logger.log(Level.FINE, "needed to rescope distance to {0} from {1}", new Object[]{testDist, new_dist});
                 }
                 new_dist = testDist;
             }
@@ -343,21 +342,12 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
         dAttributes.setTo(line);
         graphics.add(line);
 
-        // String outtext;
-        // if (new_dist < 1.0f) {
-        // outtext = String.format("%.3f %s", new_dist, cur_uom.getAbbr());
-        // } else if (new_dist < 10.0f) {
-        // outtext = String.format("%.2f %s", new_dist, cur_uom.getAbbr());
-        // } else if (new_dist < 100.0f) {
-        // outtext = String.format("%.1f %s", new_dist, cur_uom.getAbbr());
-        // } else {
         String outtext = String.format("%.0f %s", new_dist, cur_uom.getAbbr());
-        // }
 
-        OMText text = new OMText(right_x, lower_y - 20, "" + outtext, OMText.JUSTIFY_RIGHT);
+        OMText text = new OMText((left_x + right_x) / 2, lower_y - 3, "" + outtext, OMText.JUSTIFY_CENTER);
 
         Font font = text.getFont();
-        text.setFont(font.deriveFont(Font.BOLD, font.getSize() + 4));
+        text.setFont(font.deriveFont(font.getStyle(), font.getSize() + 2));
 
         dAttributes.setTo(text);
         text.setTextMatteColor((Color) dAttributes.getMattingPaint());
@@ -365,7 +355,7 @@ public class EmbeddedScaleDisplayPanel extends OMComponentPanel implements Proje
         text.setMattingPaint(OMColor.clear);
         graphics.add(text);
         graphics.generate(projection);
-
+        
         setLegend(graphics);
 
     }
