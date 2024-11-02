@@ -51,7 +51,7 @@
 		<description>
 		  Provide map tiles as asked for, based on z/x/y.png requests.
 		</description>
-		<servlet-class>com.bbn.openmap.maptileservlet.MapTileServlet</servlet-class>
+		<servlet-class>com.bbn.openmap.servlet.mapTile.MapTileServlet</servlet-class>
 	</servlet>
 
     <!-- Define the mapping from URL path to servlet -->

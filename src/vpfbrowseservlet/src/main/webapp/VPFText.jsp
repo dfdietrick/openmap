@@ -11,7 +11,7 @@ This is help text.
 Here we are.
 <ul>
 <li>Hostname: 
-<jsp:useBean id="lst" class="com.bbn.openmap.vpfservlet.LibraryBean">
+<jsp:useBean id="lst" class="com.bbn.openmap.servlet.vpfBrowse.LibraryBean">
     <% lst.setContext(application); %>
     <% lst.setResponse(response); %>
     <jsp:setProperty name="lst" property="path" param="db"/>
