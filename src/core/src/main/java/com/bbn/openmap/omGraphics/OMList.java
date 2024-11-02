@@ -53,6 +53,8 @@ import com.bbn.openmap.util.Debug;
  * whether the first or last object added to the list (FIRST_ADDED_ON_TOP or
  * LAST_ADDED_ON_TOP) is drawn on top of the list and considered first for
  * searches.
+ * 
+ * @param <T> extends OMGeometry
  */
 public abstract class OMList<T extends OMGeometry> extends OMGraphicAdapter implements List<T>,
         OMGraphic {
@@ -109,7 +111,7 @@ public abstract class OMList<T extends OMGeometry> extends OMGraphicAdapter impl
     /**
      * The List that actually contains the the OMGeometry/OMGraphic objects.
      */
-    protected List<T> graphics;
+    protected final List<T> graphics;
 
     /**
      * Construct an OMGraphicList.
@@ -1298,7 +1300,7 @@ public abstract class OMList<T extends OMGeometry> extends OMGraphicAdapter impl
 
         if (action.isMask(LOWER_TO_BOTTOM_GRAPHIC_MASK)) {
             Debug.message("omgl", "OMGraphicList.doAction: lowering graphic to bottom");
-            moveIndexedOneToBottom(i);
+            moveIndexedToBottom(i); // -> Corrected by Jose M. Torres
         }
 
         if (action.isMask(DESELECTALL_GRAPHIC_MASK)) {

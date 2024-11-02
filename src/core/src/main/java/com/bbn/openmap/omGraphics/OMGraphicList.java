@@ -78,7 +78,7 @@ public class OMGraphicList extends OMList<OMGraphic> implements Serializable {
      * @param initialCapacity the initial capacity of the list
      */
     public OMGraphicList(int initialCapacity) {
-        graphics = Collections.synchronizedList(new ArrayList<OMGraphic>(initialCapacity));
+        super(initialCapacity);
     }
 
     /**
@@ -293,12 +293,6 @@ public class OMGraphicList extends OMList<OMGraphic> implements Serializable {
      * @return a reference of the graphics List.
      */
     public List<OMGraphic> getTargets() {
-        if (graphics == null) {
-            // make sure that the graphics vector is not null,
-            // since all of the internal methods rely on it.
-            graphics = Collections.synchronizedList(new ArrayList<OMGraphic>(10));
-        }
-
         return graphics;
     }
 
@@ -306,9 +300,14 @@ public class OMGraphicList extends OMList<OMGraphic> implements Serializable {
      * Set the List used to hold the OMGraphics. The OMGraphicList assumes that
      * this list contains OMGraphics. Make *SURE* this is the case. The
      * OMGraphicList will behave badly if there are non-OMGraphics on the list.
+     * 
+     * @param list the list of OMGraphics to replace all current OMGraphics.
      */
     public void setTargets(List<OMGraphic> list) {
-        graphics = Collections.synchronizedList(new ArrayList<OMGraphic>(list));
+        graphics.clear();
+        if (list != null) {
+            graphics.addAll(list);
+        }
     }
 
     /**
